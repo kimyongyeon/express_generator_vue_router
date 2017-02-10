@@ -70,7 +70,7 @@ io.on('connection', function(socket){
             var fnGameInfo = function () {
                 io.emit('server-send', JSON.stringify(games_json));
             }
-            setInterval(fnGameInfo, 55000 ); // 55초
+            setInterval(fnGameInfo, 30000 ); // 55초
 
         } else if (m.msg == 'betinfo') { // 배팅정보 수시 수신
             var code = {
