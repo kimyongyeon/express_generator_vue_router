@@ -68,6 +68,8 @@ io.on('connection', function(socket){
             setInterval(fnSigma, 5000); // 5초
             // 3분 말료 5초전 gameresult, gameinfo
             var fnGameInfo = function () {
+                shuffle(games_json.data.gameresult.result);
+                console.log(games_json);
                 io.emit('server-send', JSON.stringify(games_json));
             }
             setInterval(fnGameInfo, 30000 ); // 55초
@@ -81,6 +83,16 @@ io.on('connection', function(socket){
         }
     });
 });
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length; i; i--) {
+        j = Math.floor(Math.random() * i);
+        x = a[i - 1];
+        a[i - 1] = a[j];
+        a[j] = x;
+    }
+}
 
 
 module.exports = app;
