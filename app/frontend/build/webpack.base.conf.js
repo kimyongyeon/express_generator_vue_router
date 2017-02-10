@@ -40,7 +40,8 @@ module.exports = {
         enforce: "pre",
         include: [resolve('src'), resolve('test')],
         options: {
-          formatter: eslintFriendlyFormatter
+          formatter: eslintFriendlyFormatter,
+          "space-before-function-paren": ["error", "always"]
         }
       },
       {

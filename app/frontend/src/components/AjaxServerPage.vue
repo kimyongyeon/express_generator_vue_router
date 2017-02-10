@@ -3,7 +3,7 @@
 
     <el-row :gutter="10">
       <el-col span="16">
-        <h1>Client Game API</h1>
+        <h1>Ajax Server</h1>
       </el-col>
     </el-row>
 

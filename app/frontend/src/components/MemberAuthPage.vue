@@ -3,7 +3,8 @@
 
     <el-row :gutter="10">
       <el-col span="16">
-        <h1>Client Game API</h1>
+        <h1>Member Auth</h1>
+        <p> {{ msg }}</p>
       </el-col>
     </el-row>
 
@@ -41,7 +42,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Client Game Api List'
+      msg: 'member auth comment'
     }
   }
 }
