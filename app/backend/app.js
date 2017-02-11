@@ -55,25 +55,27 @@ io.on('connection', function(socket){
     socket.on('client-rev', function(msg){
         console.log(msg);
         var m = JSON.parse(msg);
+
+        var fnSigma = function() {
+            // 응답코드 전송 5초마다 한번씩 전송
+            var code = {
+                code: 0,
+                time: new Date()
+            };
+            io.emit('server-send', JSON.stringify(code));
+        };
+        setInterval(fnSigma, 5000); // 5초
+        // 3분 말료 5초전 gameresult, gameinfo
+        var fnGameInfo = function () {
+            shuffle(games_json.data.gameresult.result);
+            console.log(games_json.data.gameresult.result);
+            io.emit('server-send', JSON.stringify(games_json));
+        }
+        setInterval(fnGameInfo, 30000 ); // 55초
+
         // 게임 시작시 최초 한번
         if (m.msg == 'req') {
-            var fnSigma = function() {
-                // 응답코드 전송 5초마다 한번씩 전송
-                var code = {
-                    code: 0,
-                    time: new Date()
-                };
-                io.emit('server-send', JSON.stringify(code));
-            };
-            setInterval(fnSigma, 5000); // 5초
-            // 3분 말료 5초전 gameresult, gameinfo
-            var fnGameInfo = function () {
-                shuffle(games_json.data.gameresult.result);
-                console.log(games_json);
-                io.emit('server-send', JSON.stringify(games_json));
-            }
-            setInterval(fnGameInfo, 30000 ); // 55초
-
+            console.log(`data => ${m}`)
         } else if (m.msg == 'betinfo') { // 배팅정보 수시 수신
             var code = {
                 code: 100,
