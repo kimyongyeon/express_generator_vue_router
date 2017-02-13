@@ -124,6 +124,8 @@ var fnArrayList = function() {
     arrayList.push(randomItem2(failArray));
     arrayList.push(randomItem2(failArray));
     arrayList.push(randomItem2(failArray));
+
+    shuffle(arrayList);
     
     return arrayList;
 }
