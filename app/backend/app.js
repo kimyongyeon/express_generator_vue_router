@@ -161,11 +161,11 @@ function shuffle(a) {
 
 // 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
 function randomItem1(a) {
-    return a[randomRange(1, 8)];
+    return a[randomRange(0, 7)];
 }
 
 function randomItem2(a) {
-    return a[randomRange(1, 32)];
+    return a[randomRange(0, 31)];
 }
 
 function randomRange(n1, n2) {
