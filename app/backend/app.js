@@ -68,6 +68,76 @@ io.on('connection', function(socket){
     });
 });
 
+var fnArrayList = function() {
+    var winArray =
+            [[10, 20, 10, 10, 10, 10, - 10, 20, 10, 10],
+        [10, 20, 30, 0, 10, -20, 10, 30, -20, 30],
+        [10, 10, 0, 10, 20, 0, 10, 20, 0, 20],
+        [10, 30, -30, 10, 20, 0, 10, 20, 10, 20],
+        [10, 20, 30, -20, 10, 20, -20, 10, 10, 30],
+        [10, 20, 10, -30, 10, 20, 20, 10, 10, 20],
+        [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+        [20, 20, -30, 10, 10, 20, -30, 20, 30, 30]
+    ];
+
+    var failArray = [[10,20,-10,10,10,10,-10,20,10,10]
+        [10,20,10,10,-10,10,10,20,-10,10],
+        [10,20,-10,10,10,-10,10,20,10,10],
+        [10,20,10,-10,10,-10,10,10,-10,10],
+        [10,20,30,0,10,-20,10,30,-30,30],
+        [10,20,30,0,10,-30,10,30,-20,30],
+        [10,20,30,0,0,-20,10,30,-20,30],
+        [10,20,30,0,10,-20,0,30,-20,30],
+        [10,10,0,10,20,0,10,20,0,10],
+        [10,10,0,10,20,0,10,20,0,0],
+        [10,10,0,10,20,0,10,20,0,-20],
+        [10,10,0,10,10,0,10,20,0,20],
+        [10,30,-30,10,20,0,10,20,10,10],
+        [10,30,-30,10,20,0,10,20,10,0],
+        [10,30,-30,10,20,0,10,20,10,-30],
+        [10,30,-30,10,20,0,-30,20,10,20],
+        [10,20,30,-20,10,20,-20,10,10,20],
+        [10,20,30,-20,10,20,-20,10,10,10],
+        [10,20,30,-20,10,20,-20,10,10,-20],
+        [10,20,30,-20,10,10,-20,10,10,30],
+        [10,20,10,-30,10,20,20,10,-30,20],
+        [10,20,10,-30,10,20,20,10,10,10],
+        [10,20,10,-30,10,20,10,10,10,20],
+        [10,20,10,-30,10,20,-30,10,10,20],
+        [10,10,10,10,-10,10,10,10,10,10],
+        [10,10,10,-30,10,10,10,10,10,10],
+        [10,10,10,10,10,10,10,-30,10,10],
+        [10,10,10,10,10,10,-10,10,10,10],
+        [20,20,-30,10,10,20,-30,20,30,-30],
+        [20,20,-30,10,-30,20,-30,20,30,30],
+        [20,10,-30,10,10,20,-30,20,30,30],
+        [20,20,-30,10,10,20,-30,20,10,30]
+    ];
+
+    var arrayList = [];
+    var a = randomItem(winArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    a = randomItem(failArray);
+    arrayList.push(a);
+    return arrayList;
+}
+
 var fnSigma = function() {
     // 응답코드 전송 5초마다 한번씩 전송
     var code = {
@@ -80,8 +150,11 @@ var fnSigma = function() {
 setInterval(fnSigma, 5000); // 5초
 // 3분 말료 5초전 gameresult, gameinfo
 var fnGameInfo = function () {
-    shuffle(games_json.data.gameresult.result);
+    //shuffle(games_json.data.gameresult.result);
+    console.log("+++++++++++++++++++++++");
+    games_json.data.gameresult.result = fnArrayList();
     console.log(games_json.data.gameresult.result);
+    console.log("+++++++++++++++++++++++");
     io.emit('server-send', JSON.stringify(games_json));
 }
 setInterval(fnGameInfo, 30000 ); // 55초
@@ -96,5 +169,9 @@ function shuffle(a) {
     }
 }
 
+// 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
+function randomItem(a) {
+    return a[Math.floor(Math.random() * a.length)];
+}
 
 module.exports = app;
