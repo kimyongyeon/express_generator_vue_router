@@ -115,25 +115,25 @@ var fnArrayList = function() {
     ];
 
     var arrayList = [];
-    var a = randomItem(winArray);
+    var a = randomItem1(winArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
-    a = randomItem(failArray);
+    a = randomItem2(failArray);
     arrayList.push(a);
     return arrayList;
 }
@@ -170,8 +170,17 @@ function shuffle(a) {
 }
 
 // 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
-function randomItem(a) {
-    return a[Math.floor(Math.random() * (a.length - 1))];
+function randomItem1(a) {
+    return a[randomRange(1, 8];
 }
+
+function randomItem2(a) {
+    return a[randomRange(1, 32)];
+}
+
+function randomRange(n1, n2) {
+    return Math.floor( (Math.random() * (n2 - n1 + 1)) + n1 );
+}
+
 
 module.exports = app;
