@@ -137,7 +137,7 @@ var fnSigma = function() {
     io.emit('server-send', JSON.stringify(code));
 };
 
-setInterval(fnSigma, 5000); // 5초
+setInterval(fnSigma, 3000); // 5초
 // 3분 말료 5초전 gameresult, gameinfo
 var fnGameInfo = function () {
     //shuffle(games_json.data.gameresult.result);
@@ -147,8 +147,8 @@ var fnGameInfo = function () {
     console.log("+++++++++++++++++++++++");
     io.emit('server-send', JSON.stringify(games_json));
 }
-// setInterval(fnGameInfo, 30000 ); // 55초
-setInterval(fnGameInfo, 1000 ); // 55초
+setInterval(fnGameInfo, 30000 ); // 55초
+// setInterval(fnGameInfo, 1000 ); // 55초
 
 function shuffle(a) {
     var j, x, i;
