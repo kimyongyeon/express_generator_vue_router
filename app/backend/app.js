@@ -171,7 +171,7 @@ function shuffle(a) {
 
 // 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
 function randomItem(a) {
-    return a[Math.floor(Math.random() * a.length)];
+    return a[Math.floor(Math.random() * (a.length - 1))];
 }
 
 module.exports = app;
