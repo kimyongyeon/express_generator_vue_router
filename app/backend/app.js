@@ -149,8 +149,8 @@ var fnGameInfo = function () {
     console.log("+++++++++++++++++++++++");
     io.emit('server-send', JSON.stringify(games_json));
 }
-setInterval(fnGameInfo, 30000 ); // 55초
-// setInterval(fnGameInfo, 1000 ); // 55초
+// setInterval(fnGameInfo, 30000 ); // 55초
+setInterval(fnGameInfo, 1000 ); // 55초
 
 function shuffle(a) {
     var j, x, i;
@@ -164,7 +164,7 @@ function shuffle(a) {
 
 // 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
 function randomItem1(a) {
-    var r = Number(randomRange(1, 7));
+    var r = Number(randomRange(0, 7));
     console.log(r);
     return a[r];
 }
