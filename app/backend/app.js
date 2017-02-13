@@ -165,7 +165,7 @@ function randomItem1(a) {
 }
 
 function randomItem2(a) {
-    return a[randomRange(0, 31)];
+    return a[randomRange(0, 30)];
 }
 
 function randomRange(n1, n2) {
