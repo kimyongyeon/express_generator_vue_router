@@ -115,26 +115,16 @@ var fnArrayList = function() {
     ];
 
     var arrayList = [];
-    var a = randomItem1(winArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
-    a = randomItem2(failArray);
-    arrayList.push(a);
+    
+    arrayList.push(randomItem1(winArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    arrayList.push(randomItem2(failArray));
+    
     return arrayList;
 }
 
