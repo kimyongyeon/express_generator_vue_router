@@ -69,8 +69,8 @@ io.on('connection', function(socket){
 });
 
 var fnArrayList = function() {
-    var winArray =
-            [[10, 20, 10, 10, 10, 10, - 10, 20, 10, 10],
+    var winArray = [
+        [10, 20, 10, 10, 10, 10, - 10, 20, 10, 10],
         [10, 20, 30, 0, 10, -20, 10, 30, -20, 30],
         [10, 10, 0, 10, 20, 0, 10, 20, 0, 20],
         [10, 30, -30, 10, 20, 0, 10, 20, 10, 20],
@@ -80,7 +80,8 @@ var fnArrayList = function() {
         [20, 20, -30, 10, 10, 20, -30, 20, 30, 30]
     ];
 
-    var failArray = [[10,20,-10,10,10,10,-10,20,10,10]
+    var failArray = [
+        [10,20,-10,10,10,10,-10,20,10,10],
         [10,20,10,10,-10,10,10,20,-10,10],
         [10,20,-10,10,10,-10,10,20,10,10],
         [10,20,10,-10,10,-10,10,10,-10,10],
@@ -115,15 +116,24 @@ var fnArrayList = function() {
     ];
 
     var arrayList = [];
-    
-    arrayList.push(randomItem1(winArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
-    arrayList.push(randomItem2(failArray));
+    var winner = {
+        items: winArray, // array
+        f1: 0,
+        f2: 7
+    };
+    arrayList.push(randomItem(winner));
+    var failer = {
+        items: failArray, // array
+        f1: 0,
+        f2: 31
+    };
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
+    arrayList.push(randomItem(failer));
 
     shuffle(arrayList);
     
@@ -162,17 +172,9 @@ function shuffle(a) {
     }
 }
 
-// 주어진 배열에서 요소 1개를 랜덤하게 골라 반환하는 함수
-function randomItem1(a) {
-    var r = Number(randomRange(0, 7));
-    console.log(r);
-    return a[r];
-}
-
-function randomItem2(a) {
-    var r = Number(randomRange(1, 30));
-    console.log(r);
-    return a[r];
+function randomItem(_randItem) {
+    var r = randomRange(_randItem.f1, _randItem.f2);
+    return _randItem.items[r];
 }
 
 function randomRange(n1, n2) {
