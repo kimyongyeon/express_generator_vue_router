@@ -5,15 +5,61 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var io = require('socket.io').listen(80);
+var mongoose    = require('mongoose');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var movies = require('./routes/movies');
 var games_json = require('./games');
-
-console.log(games_json);
-
+var db;
+var GameModel;
 var app = express();
+
+function dbConnect() {
+// CONNECT TO MONGODB SERVER
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://kimyongyeon:asdwsx12@ds145359.mlab.com:45359/gamehis');
+    db = mongoose.connection;
+    db.on('error', console.error);
+    db.once('open', function(){
+        // CONNECTED TO MONGODB SERVER
+        console.log("Connected to mongod server");
+    });
+}
+
+// 데이터 스키마
+function schemaMake() {
+    var Schema = mongoose.Schema;
+    var gameHisSchema = new Schema({
+        title: String,
+        winList: [],
+        totalList: [],
+        reg_date: { type: Date, default: Date.now  }
+    });
+    GameModel = mongoose.model('gameHis', gameHisSchema);
+}
+
+// 게임 데이터 저장
+function gameDataSave(winList, totalList) {
+    var gameModel = new GameModel({
+        title: "gamehis",
+        winList: winList,
+        totalList: totalList,
+        reg_date: new Date()
+    });
+    gameModel.save(function(err, msg){
+        if(err) return console.error("err : " + err);
+        console.dir("success : "  + msg);
+    });
+}
+
+// 해당 열에대한 배열의 전체 나올 확률 통계
+function gameDataStat() {
+
+}
+
+dbConnect();
+schemaMake();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -70,49 +116,49 @@ io.on('connection', function(socket){
 
 var fnArrayList = function() {
     var winArray = [
-        [6,12,26,7,-7,8,8,16,8,16],
-        [8,16,30,0,0,8,-16,8,16,30],
-        [5,10,0,6,12,0,6,13,24,24],
-        [8,30,30,-30,8,16,16,-30,24,28],
-        [6,16,20,-10,8,16,-10,8,16,30],
-        [6,12,8,-20,8,16,16,8,16,30],
-        [6,10,6,11,7,12,7,13,8,20],
-        [16,16,-22,8,16,16,-26,16,30,30]
+        [7,7,10,13,10,10,7,10,13,13],
+        [8,14,8,14,1,5,8,11,14,17],
+        [6,9,12,9,6,9,12,10,13,14],
+        [6,9,12,15,15,1,3,9,15,15],
+        [7,10,13,9,6,12,9,12,10,12],
+        [8,11,12,10,7,1,7,13,14,17],
+        [6,9,12,9,6,9,12,9,12,16],
+        [12,16,3,4,12,16,4,5,12,16]
     ];
 
     var failArray = [
-        [6,10,20,6,-8,6,6,-8,7,10],
-            [6,10,20,0,0,6,-16,0,10,20],
-            [5,10,0,6,0,6,0,10,0,20],
-            [7,20,20,-30,8,11,12,-30,20,20],
-            [6,10,20,-16,6,10,-15,8,10,20],
-            [6,10,6,-24,6,10,10,6,10,20],
-            [6,6,6,6,6,6,6,6,6,7],
-            [10,10,-20,6,11,11,-21,14,20,21],
-            [6,10,20,8,-8,8,8,-8,8,11],
-            [6,10,20,0,0,6,-14,6,10,20],
-            [5,10,0,6,7,7,0,0,10,20],
-            [8,20,20,-30,8,10,10,-30,20,30],
-            [6,16,24,-16,6,10,-17,7,11,20],
-            [6,12,6,-20,6,12,10,6,10,20],
-            [6,10,6,6,6,6,6,7,6,10],
-            [12,14,-22,7,16,16,-23,10,20,20],
-            [8,30,25,-30,8,10,10,-30,20,20],
-            [7,10,20,0,0,8,-16,6,14,23],
-            [5,10,0,0,6,0,6,11,12,23],
-            [6,10,20,6,-8,8,6,10,6,10],
-            [12,14,-24,8,14,14,-25,15,20,27],
-            [7,14,7,-22,8,16,10,6,10,20],
-            [6,10,6,6,10,10,6,7,6,11],
-            [6,11,21,7,-7,7,6,10,8,11],
-            [5,10,0,6,0,0,6,14,20,21],
-            [8,16,30,0,0,8,-27,7,15,27],
-            [8,21,23,-23,8,11,13,-21,22,24],
-            [7,16,26,-16,6,16,-19,6,16,30],
-            [8,16,27,-16,6,16,-19,6,16,30],
-            [8,16,6,-26,6,16,16,6,16,28],
-            [6,10,6,10,10,6,10,10,6,20],
-            [16,16,-26,16,16,16,-30,12,30,30]
+        [6,6,1,3,9,3,6,1,9,11],
+            [8,2,8,3,1,5,8,2,2,17],
+            [6,9,1,9,6,1,4,6,6,9],
+            [6,4,7,3,5,2,4,9,3,15],
+            [7,7,6,3,3,6,3,6,6,12],
+            [8,5,5,9,7,1,7,3,6,9],
+            [6,9,4,7,3,3,6,9,6,8],
+            [12,6,3,4,6,6,4,5,6,10],
+            [6,2,9,6,3,1,9,9,6,12],
+            [8,2,8,5,1,5,7,2,9,17],
+            [6,8,2,9,4,6,6,3,6,15],
+            [6,9,1,3,6,1,3,9,12,16],
+            [7,10,10,4,7,4,5,4,5,11],
+            [8,6,6,6,2,6,3,7,8,16],
+            [6,9,6,9,6,2,1,5,12,13],
+            [12,5,6,6,3,4,4,5,9,16],
+            [6,6,4,12,9,1,3,9,9,12],
+            [8,2,8,3,9,8,8,2,7,17],
+            [6,7,1,9,6,9,9,6,6,14],
+            [6,9,2,3,6,6,7,9,11,15],
+            [7,6,13,6,3,6,9,3,10,12],
+            [8,11,6,8,7,1,7,8,7,13],
+            [6,9,8,9,6,9,6,9,6,10],
+            [12,16,3,4,6,14,4,5,6,10],
+            [6,6,9,12,9,9,6,9,4,12],
+            [8,1,7,5,2,5,8,17,14,17],
+            [6,9,11,11,2,3,7,10,13,14],
+            [6,9,12,13,9,1,3,9,15,11],
+            [7,10,5,8,6,11,9,12,10,12],
+            [8,11,12,10,7,1,7,13,13,10],
+            [6,9,9,9,6,9,12,9,9,16],
+            [12,16,3,4,10,14,4,5,12,16]
     ];
 
     var arrayList = [];
@@ -121,7 +167,11 @@ var fnArrayList = function() {
         f1: 0,
         f2: 7
     };
-    arrayList.push(randomItem(winner));
+
+    var winArray = randomItem(winner);
+
+    arrayList.push(winArray);
+
     var failer = {
         items: failArray, // array
         f1: 0,
@@ -135,27 +185,30 @@ var fnArrayList = function() {
     arrayList.push(randomItem(failer));
     arrayList.push(randomItem(failer));
 
+    console.log(`==> ${winArray}`);
+    gameDataSave(winArray, arrayList);
+
     shuffle(arrayList);
 
-    // Sets
-    var s = new Set();
-    s.add("hello").add("goodbye").add("hello");
-    console.log(s.size === 2);
-    console.log(s.has("hello") === true);
-
-    // Maps -hello
-    var m = new Map();
-    m.set("hello", 42);
-    console.log(m.set(s, 34));
-    console.log(m.get(s) == 34);
-
-    // Weak Maps
-    var wm = new WeakMap();
-    console.log(wm.set(s, { extra: 42 }));
-
-    // Weak Sets
-    var ws = new WeakSet();
-    console.log(ws.add({ data: 42 }));
+    // // Sets
+    // var s = new Set();
+    // s.add("hello").add("goodbye").add("hello");
+    // console.log(s.size === 2);
+    // console.log(s.has("hello") === true);
+    //
+    // // Maps -hello
+    // var m = new Map();
+    // m.set("hello", 42);
+    // console.log(m.set(s, 34));
+    // console.log(m.get(s) == 34);
+    //
+    // // Weak Maps
+    // var wm = new WeakMap();
+    // console.log(wm.set(s, { extra: 42 }));
+    //
+    // // Weak Sets
+    // var ws = new WeakSet();
+    // console.log(ws.add({ data: 42 }));
 
     return arrayList;
 }
