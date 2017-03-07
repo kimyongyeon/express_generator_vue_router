@@ -229,10 +229,22 @@ var fnGameInfo = function () {
     console.log("+++++++++++++++++++++++");
 
     games_json.data.gameresult.starttime = new Date();
-    games_json.data.gameresult.endtime = new Date().addMinutes(1);
+    var year = games_json.data.gameresult.starttime.getYear();
+    var month = games_json.data.gameresult.starttime.getMonth();
+    var day = games_json.data.gameresult.starttime.getDay();
 
+    var now = new Date();
+    games_json.data.gameresult.servertime = new Date( Date.UTC(now.getFullYear()
+        , now.getMonth()
+        , now.getDate()
+        ,now.getHours()
+        , now.getMinutes()
+        , now.getUTCSeconds()));
+
+    games_json.data.gameresult.endtime = new Date().addMinutes(1);
     games_json.data.gameresult.result = fnArrayList();
     console.log(games_json.data.gameresult.result);
+    console.log(games_json.data.gameresult.servertime);
     console.log(games_json.data.gameresult.starttime);
     console.log(games_json.data.gameresult.endtime);
 
