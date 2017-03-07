@@ -239,7 +239,7 @@ var fnGameInfo = function () {
     console.log("+++++++++++++++++++++++");
     io.emit('server-send', JSON.stringify(games_json));
 }
-setInterval(fnGameInfo, 30000); // 55초
+setInterval(fnGameInfo, 60000); // 55초
 // setInterval(fnGameInfo, 1000 ); // 55초
 
 Date.prototype.addMinutes = function(minutes) {
