@@ -203,26 +203,28 @@ var fnSigma = function () {
     io.emit('server-send', JSON.stringify(code));
 };
 
+fnSigma();
+
 setInterval(fnSigma, 3000); // 5초
 // 3분 말료 5초전 gameresult, gameinfo
 var fnGameInfo = function () {
 //shuffle(games_json.data.gameresult.result);
     console.log("+++++++++++++++++++++++");
+    games_json.data.gameresult.starttime = new Date();
     var now = new Date();
-    games_json.data.gameresult.starttime = now;
-    games_json.data.gameresult.servertime = new Date( Date.UTC(now.getFullYear()
-        , now.getMonth()
-        , now.getDate()
-        , now.getHours()
-        , now.getMinutes()
-        , now.getUTCSeconds()));
+    games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
+        , now.getUTCMonth()
+        , now.getUTCDay()
+        , now.getUTCHours()
+        , now.getUTCMinutes()
+        , now.getUTCSeconds()) );
 
     games_json.data.gameresult.endtime = new Date().addMinutes(1);
     games_json.data.gameresult.result = fnArrayList();
     console.log(games_json.data.gameresult.result);
-    console.log(games_json.data.gameresult.servertime);
-    console.log(games_json.data.gameresult.starttime);
-    console.log(games_json.data.gameresult.endtime);
+    console.log("servertime : " + games_json.data.gameresult.servertime);
+    console.log("starttime : " + games_json.data.gameresult.starttime);
+    console.log("endtime : " + games_json.data.gameresult.endtime);
 
     console.log("+++++++++++++++++++++++");
     io.emit('server-send', JSON.stringify(games_json));
