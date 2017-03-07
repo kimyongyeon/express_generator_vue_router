@@ -187,29 +187,7 @@ var fnArrayList = function () {
 
     console.log(`==> ${winArray}`);
     gameDataSave(winArray, arrayList);
-
     shuffle(arrayList);
-
-// // Sets
-// var s = new Set();
-// s.add("hello").add("goodbye").add("hello");
-// console.log(s.size === 2);
-// console.log(s.has("hello") === true);
-//
-// // Maps -hello
-// var m = new Map();
-// m.set("hello", 42);
-// console.log(m.set(s, 34));
-// console.log(m.get(s) == 34);
-//
-// // Weak Maps
-// var wm = new WeakMap();
-// console.log(wm.set(s, { extra: 42 }));
-//
-// // Weak Sets
-// var ws = new WeakSet();
-// console.log(ws.add({ data: 42 }));
-
     return arrayList;
 }
 
@@ -217,8 +195,11 @@ var fnSigma = function () {
 // 응답코드 전송 5초마다 한번씩 전송
     var code = {
         code: 0,
-        time: new Date()
+        time: new Date(),
+        starttime: games_json.data.gameresult.starttime,
+        endtime: games_json.data.gameresult.endtime
     };
+    console.log(code);
     io.emit('server-send', JSON.stringify(code));
 };
 
@@ -227,17 +208,12 @@ setInterval(fnSigma, 3000); // 5초
 var fnGameInfo = function () {
 //shuffle(games_json.data.gameresult.result);
     console.log("+++++++++++++++++++++++");
-
-    games_json.data.gameresult.starttime = new Date();
-    var year = games_json.data.gameresult.starttime.getYear();
-    var month = games_json.data.gameresult.starttime.getMonth();
-    var day = games_json.data.gameresult.starttime.getDay();
-
     var now = new Date();
+    games_json.data.gameresult.starttime = now;
     games_json.data.gameresult.servertime = new Date( Date.UTC(now.getFullYear()
         , now.getMonth()
         , now.getDate()
-        ,now.getHours()
+        , now.getHours()
         , now.getMinutes()
         , now.getUTCSeconds()));
 
