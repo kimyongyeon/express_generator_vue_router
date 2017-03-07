@@ -103,19 +103,17 @@ io.on('connection', function (socket) {
         var m = JSON.parse(msg);
 // 게임 시작시 최초 한번
         if (m.msg == 'req') {
-            console.log(`data => ${m}`)
-        } else if (m.msg == 'betinfo') { // 배팅정보 수시 수신
-            var code = {
-                code: 100,
-                msg: "success"
-            };
-            io.emit('server-send', JSON.stringify(code));
-        } else {
             var code = {
                 code: 0,
                 time: new Date(),
                 starttime: games_json.data.gameresult.starttime,
                 endtime: games_json.data.gameresult.endtime
+            };
+            io.emit('server-send', JSON.stringify(code));
+        } else if (m.msg == 'betinfo') { // 배팅정보 수시 수신
+            var code = {
+                code: 100,
+                msg: "success"
             };
             io.emit('server-send', JSON.stringify(code));
         }
