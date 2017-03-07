@@ -110,6 +110,14 @@ io.on('connection', function (socket) {
                 msg: "success"
             };
             io.emit('server-send', JSON.stringify(code));
+        } else {
+            var code = {
+                code: 0,
+                time: new Date(),
+                starttime: games_json.data.gameresult.starttime,
+                endtime: games_json.data.gameresult.endtime
+            };
+            io.emit('server-send', JSON.stringify(code));
         }
     });
 });
@@ -195,9 +203,7 @@ var fnSigma = function () {
 // 응답코드 전송 5초마다 한번씩 전송
     var code = {
         code: 0,
-        time: new Date(),
-        starttime: games_json.data.gameresult.starttime,
-        endtime: games_json.data.gameresult.endtime
+        time: new Date()
     };
     console.log(code);
     io.emit('server-send', JSON.stringify(code));
