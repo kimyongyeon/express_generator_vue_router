@@ -228,8 +228,8 @@ var fnGameInfo = function () {
 //shuffle(games_json.data.gameresult.result);
     console.log("+++++++++++++++++++++++");
 
-    games_json.data.gameresult.starttime = new Date().addSeconds(3);
-    games_json.data.gameresult.endtime = new Date();
+    games_json.data.gameresult.starttime = new Date();
+    games_json.data.gameresult.endtime = new Date().addMinutes(1);
 
     games_json.data.gameresult.result = fnArrayList();
     console.log(games_json.data.gameresult.result);
