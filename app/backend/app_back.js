@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var io = require('socket.io').listen(3000);
+var io = require('socket.io').listen(80);
 var mongoose = require('mongoose');
 require('date-utils');
 console.log(new Date().toFormat('YYYY-MM-DD HH24:MI:SS'));
@@ -378,6 +378,24 @@ io.on('connection', function (socket) {
     // 소켓 받기
     socket.on('client-rev', function (msg) {
         var m = JSON.parse(msg);
+
+        var now = new Date();
+        games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
+            , now.getUTCMonth()
+            , now.getUTCDay()
+            , now.getUTCHours()
+            , now.getUTCMinutes()
+            , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
+
+        var resultMsg = {
+            code: 0,
+            time: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
+            servertime: games_json.data.gameresult.servertime,
+            starttime: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
+            endtime: new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS')
+        };
+
+        noticeSendMsg(resultMsg);
 
         if (!m.userId) {
             var resultMsg = {
