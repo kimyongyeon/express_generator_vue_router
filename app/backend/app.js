@@ -365,8 +365,8 @@ var fnGameInfo = function () {
 };
 
 setInterval(fnSigma, 1000); // 5초
-setInterval(fnGameInfo, 1000); // 1분 테스트
-// setInterval(fnGameInfo, 120000); // 실제 2분
+// setInterval(fnGameInfo, 1000); // 1분 테스트
+setInterval(fnGameInfo, 120000); // 실제 2분
 
 var rooms = new Set(); // 개인 방
 var userIds = new Set(); // 아이디
