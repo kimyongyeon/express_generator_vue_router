@@ -22,6 +22,7 @@ var app = express();
 
 var dbConnectionFlag = false; // connection 유무
 var gameSeq = 1; // gameSeq
+var _minute = 1;
 
 (function dbConnect() {
 // CONNECT TO MONGODB SERVER
@@ -260,7 +261,7 @@ function gameResultDataSet(list) {
                         , now.getUTCMinutes()
                         , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
 
-                    games_json.data.gameresult.endtime = new Date().addMinutes(1).toFormat('YYYY-MM-DD HH24:MI:SS');
+                    games_json.data.gameresult.endtime = new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS');
                     games_json.data.gameresult.result = fnOldArrayList();
                     games_json.data.gameresult.gameList = list;
                     games_json.data.gameresult.roundId = list.roundId.split("-")[3];
@@ -364,7 +365,7 @@ var fnGameInfo = function () {
 
 setInterval(fnSigma, 1000); // 5초
 // setInterval(fnGameInfo, 1000); // 1분 테스트
-setInterval(fnGameInfo, 60000); // 실제 2분
+setInterval(fnGameInfo, _minute * 60000);
 
 var rooms = new Set(); // 개인 방
 var userIds = new Set(); // 아이디
@@ -431,8 +432,8 @@ io.on('connection', function (socket) {
                 code: 0,
                 time: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
                 servertime: games_json.data.gameresult.servertime,
-                starttime: games_json.data.gameresult.starttime,
-                endtime: new Date().addMinutes(1).toFormat('YYYY-MM-DD HH24:MI:SS')
+                starttime: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
+                endtime: new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS')
             };
 
             for(let item of rooms) {
