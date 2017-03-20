@@ -6,10 +6,14 @@
     },
     "gameresult" : {
       "game" : "2",
+      "userId" : "test01",
       "starttime" : "2017-02-09T08:30:00.083Z",
       "endtime" : "2017-02-09T08:33:00.083Z",
+      "servertime" : "",
       "jackpot" : 0,
       "remaintime" : 0,
+      "price": 0,
+      "gameBettingResult": {},
       "result" : [
         [ 15, -5, 10, 13, 30, -21, 10, 12, 28, 8 ],
         [ 5, 8, 12, 0, 14, 18, 15, 13, 8, 3 ],
@@ -20,7 +24,8 @@
         [ 12, 11, 2, 5, 7, 19, -11, -11, 25, 29 ],
         [ 7, 4, 5, 6, 7, 2, 15, 24, -11, 12 ]
       ],
-      "roundid" : "20170209-351"
+      "gameList" : {},
+      "roundId" : "20170209-351"
     },
     "msg" : "gameresult"
   }
