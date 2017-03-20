@@ -184,8 +184,6 @@ function gameResultDataRead(gameSeq) {
 
 function gameResultDataSet(list) {
 
-
-
     if(userIds.size === 0) {
         console.log("userIds 길이가 0 입니다.");
         return;
@@ -366,7 +364,7 @@ var fnGameInfo = function () {
 
 setInterval(fnSigma, 1000); // 5초
 // setInterval(fnGameInfo, 1000); // 1분 테스트
-setInterval(fnGameInfo, 120000); // 실제 2분
+setInterval(fnGameInfo, 60000); // 실제 2분
 
 var rooms = new Set(); // 개인 방
 var userIds = new Set(); // 아이디
@@ -391,25 +389,7 @@ io.on('connection', function (socket) {
         userIds.add(m.userId);
 
         // 게임 시작시 최초 한번
-        if (m.msg == 'req') {
-            var now = new Date();
-            games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
-                , now.getUTCMonth()
-                , now.getUTCDay()
-                , now.getUTCHours()
-                , now.getUTCMinutes()
-                , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
-
-            var resultMsg = {
-                code: 0,
-                time: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
-                servertime: games_json.data.gameresult.servertime,
-                starttime: games_json.data.gameresult.starttime,
-                endtime: new Date().addMinutes(2).toFormat('YYYY-MM-DD HH24:MI:SS')
-            };
-            clientSendMsg(socket, resultMsg);
-
-        } else if (m.msg == 'bettingInfo') { // 배팅정보 수시 수신
+        if (m.msg == 'bettingInfo') { // 배팅정보 수시 수신
             var query = GameModel2.find({userId: m.userId});
 
             query.exec(function(err,jedis){
@@ -439,15 +419,29 @@ io.on('connection', function (socket) {
             });
         } else if (m.msg == "userCreate") {
 
+            var now = new Date();
+            games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
+                , now.getUTCMonth()
+                , now.getUTCDay()
+                , now.getUTCHours()
+                , now.getUTCMinutes()
+                , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
+
+            var resultMsg = {
+                code: 0,
+                time: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
+                servertime: games_json.data.gameresult.servertime,
+                starttime: games_json.data.gameresult.starttime,
+                endtime: new Date().addMinutes(1).toFormat('YYYY-MM-DD HH24:MI:SS')
+            };
+
             for(let item of rooms) {
                 console.log(item);
                 var r = JSON.parse(item);
                 if (r.socketId === socket.id) {
                     console.log("이미 아이디를 생성하셨습니다.");
-                    var resultMsg = {
-                        code: 0,
-                        msg: "이미 아이디를 생성하셨습니다.. [" + socket.id +"]"
-                    };
+                    resultMsg.msg = "이미 아이디를 생성하셨습니다.. [" + socket.id +"]"
+                    console.log(resultMsg);
                     clientSendMsg(socket, resultMsg);
                     return;
                 }
@@ -465,30 +459,12 @@ io.on('connection', function (socket) {
                 if(err) return console.log(err);
                 if(jedis.length === 0) {
                     gameIdSave(m.userId);
-                    var resultMsg = {
-                        code: 0,
-                        msg: "아이디가 정상 등록 되었습니다. [" + m.userId +"]"
-                    };
+                    resultMsg.msg = "아이디가 정상 등록 되었습니다. [" + m.userId +"]";
+                    console.log(resultMsg);
                     clientSendMsg(socket, resultMsg);
                     return;
                 }
             });
-
-            var now = new Date();
-            games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
-                , now.getUTCMonth()
-                , now.getUTCDay()
-                , now.getUTCHours()
-                , now.getUTCMinutes()
-                , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
-
-            var resultMsg = {
-                code: 0,
-                time: new Date().toFormat('YYYY-MM-DD HH24:MI:SS'),
-                servertime: games_json.data.gameresult.servertime,
-                starttime: games_json.data.gameresult.starttime,
-                endtime: new Date().addMinutes(2).toFormat('YYYY-MM-DD HH24:MI:SS')
-            };
         }
     });
 });
