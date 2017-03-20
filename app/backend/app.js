@@ -442,8 +442,10 @@ io.on('connection', function (socket) {
                     console.log("이미 아이디를 생성하셨습니다.");
                     resultMsg.msg = "이미 아이디를 생성하셨습니다.. [" + socket.id +"]"
                     console.log(resultMsg);
-                    clientSendMsg(socket, resultMsg);
+                    // clientSendMsg(socket, resultMsg);
+                    noticeSendMsg(resultMsg);
                     return;
+
                 }
             }
 
@@ -461,7 +463,8 @@ io.on('connection', function (socket) {
                     gameIdSave(m.userId);
                     resultMsg.msg = "아이디가 정상 등록 되었습니다. [" + m.userId +"]";
                     console.log(resultMsg);
-                    clientSendMsg(socket, resultMsg);
+                    // clientSendMsg(socket, resultMsg);
+                    noticeSendMsg(resultMsg);
                     return;
                 }
             });
