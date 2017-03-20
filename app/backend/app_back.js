@@ -397,15 +397,15 @@ io.on('connection', function (socket) {
 
         noticeSendMsg(resultMsg);
 
-        if (!m.userId) {
-            var resultMsg = {
-                code: -1,
-                msg: "아이디가 없습니다."
-            };
-            clientSendMsg(socket, resultMsg);
-            return;
-        }
-        userIds.add(m.userId);
+        // if (!m.userId) {
+        //     var resultMsg = {
+        //         code: -1,
+        //         msg: "아이디가 없습니다."
+        //     };
+        //     clientSendMsg(socket, resultMsg);
+        //     return;
+        // }
+        // userIds.add(m.userId);
 
         // 게임 시작시 최초 한번
         if (m.msg == 'bettingInfo') { // 배팅정보 수시 수신
