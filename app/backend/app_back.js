@@ -185,105 +185,126 @@ function gameResultDataRead(gameSeq) {
 
 function gameResultDataSet(list) {
 
-    if(userIds.size === 0) {
-        console.log("userIds 길이가 0 입니다.");
-        return;
-    }
+    // if(userIds.size === 0) {
+    //     console.log("userIds 길이가 0 입니다.");
+    //     return;
+    // }
 
     if(list.length === 0) {
         console.log("list 길이가 0 입니다.");
         return;
     }
+    games_json.data.gameresult.gameBettingResult = gameResultVO;
 
-    if(memberVO == null) {
-        console.log("memberVO 가 null 입니다.");
-        return;
-    }
+    games_json.data.gameresult.starttime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+    var now = new Date();
+    games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
+        , now.getUTCMonth()
+        , now.getUTCDay()
+        , now.getUTCHours()
+        , now.getUTCMinutes()
+        , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
 
-    for(let userId of userIds) {
+    games_json.data.gameresult.endtime = new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS');
+    games_json.data.gameresult.result = fnOldArrayList();
+    games_json.data.gameresult.gameList = list;
+    games_json.data.gameresult.roundId = list.roundId.split("-")[3];
+    games_json.data.gameresult.userId = "test";
 
-        if(userId) {
-            // 게임 현재 결과
-            var lms = gameResultVO.lms;
-            var evenHole = gameResultVO.evenHole;
-            var intervalSum = gameResultVO.intervalSum;
-            var powerBallSum = gameResultVO.powerBallSum;
+    console.log(JSON.stringify(games_json));
 
-            // 1. 사용자 아이디를 이용해서 현재 돈 price 을 구한다.
-            isIdRead(userId);
-            var currentPrice = Math.floor(memberVO.gamePrice);
+    noticeSendMsg(games_json);
 
-            if(currentPrice > 0) {
-                // 2. 얻은돈 = 현재 돈 + (배팅금액 + (배팅금액 * 배당율))
-                if (memberVO.bettingInfo) {
-                    for(var i=0; i<memberVO.bettingInfo.length; i++){
-                        if(memberVO.bettingInfo[i].lms === lms) { // 2.85
-                            currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 2.85);
-                        }
-                        else if(memberVO.bettingInfo[i].evenHole === evenHole) { // 1.95
-                            currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 1.95);
-                        }
-                        else if(memberVO.bettingInfo[i].intervalSum === intervalSum) { // 3.75
-                            currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 3.75);
-                        }
-                        else if(memberVO.bettingInfo[i].powerBallSum === powerBallSum) { // 3.95
-                            currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 3.95);
-                        }
-                    }
-                    // 3. 잃은돈 = 현재 돈 - (배팅금액)
-                    for(var i=0; i<memberVO.bettingInfo.length; i++){
-                        if(memberVO.bettingInfo[i].lms !== lms) { // 2.85
-                            currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
-                        }
-                        else if(memberVO.bettingInfo[i].evenHole !== evenHole) { // 1.95
-                            currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
-                        }
-                        else if(memberVO.bettingInfo[i].intervalSum !== intervalSum) { // 3.75
-                            currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
-                        }
-                        else if(memberVO.bettingInfo[i].powerBallSum !== powerBallSum) { // 3.95
-                            currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
-                        }
-                    }
-                    // 4. 현재돈을 userid 를 찾아서 price에 업데이트 한다.
-                    gamePriceUpdate(currentPrice);
 
-                    // 5. 게임결과 + userid + 현재돈을 클라이언트로 전송한다.
-                    games_json.data.gameresult.price = currentPrice;
-                    games_json.data.gameresult.gameBettingResult = gameResultVO;
+    // if(memberVO == null) {
+    //     console.log("memberVO 가 null 입니다.");
+    //     return;
+    // }
 
-                    games_json.data.gameresult.starttime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-                    var now = new Date();
-                    games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
-                        , now.getUTCMonth()
-                        , now.getUTCDay()
-                        , now.getUTCHours()
-                        , now.getUTCMinutes()
-                        , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
-
-                    games_json.data.gameresult.endtime = new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS');
-                    games_json.data.gameresult.result = fnOldArrayList();
-                    games_json.data.gameresult.gameList = list;
-                    games_json.data.gameresult.roundId = list.roundId.split("-")[3];
-                    games_json.data.gameresult.userId = userId;
-
-                    console.log(JSON.stringify(games_json));
-
-                    for (let item of rooms) {
-                        var resultData = JSON.parse(item);
-                        if(resultData.userId === userId) {
-                            var resultMsg = {
-                                code: 900,
-                                games_json: games_json,
-                                msg: "게임 결과 전송 성공"
-                            };
-                            io.to(resultData.socketId).emit("server-send", JSON.stringify(resultMsg)); //여기가 보냄, 방전체
-                        }
-                    }
-                }
-            }
-        }
-    }
+    // for(let userId of userIds) {
+    //
+    //     if(userId) {
+    //         // 게임 현재 결과
+    //         var lms = gameResultVO.lms;
+    //         var evenHole = gameResultVO.evenHole;
+    //         var intervalSum = gameResultVO.intervalSum;
+    //         var powerBallSum = gameResultVO.powerBallSum;
+    //
+    //         // 1. 사용자 아이디를 이용해서 현재 돈 price 을 구한다.
+    //         isIdRead(userId);
+    //         var currentPrice = Math.floor(memberVO.gamePrice);
+    //
+    //         if(currentPrice > 0) {
+    //             // 2. 얻은돈 = 현재 돈 + (배팅금액 + (배팅금액 * 배당율))
+    //             if (memberVO.bettingInfo) {
+    //                 for(var i=0; i<memberVO.bettingInfo.length; i++){
+    //                     if(memberVO.bettingInfo[i].lms === lms) { // 2.85
+    //                         currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 2.85);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].evenHole === evenHole) { // 1.95
+    //                         currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 1.95);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].intervalSum === intervalSum) { // 3.75
+    //                         currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 3.75);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].powerBallSum === powerBallSum) { // 3.95
+    //                         currentPrice = currentPrice + (Math.floor(memberVO.bettingInfo[i].price) * 3.95);
+    //                     }
+    //                 }
+    //                 // 3. 잃은돈 = 현재 돈 - (배팅금액)
+    //                 for(var i=0; i<memberVO.bettingInfo.length; i++){
+    //                     if(memberVO.bettingInfo[i].lms !== lms) { // 2.85
+    //                         currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].evenHole !== evenHole) { // 1.95
+    //                         currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].intervalSum !== intervalSum) { // 3.75
+    //                         currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
+    //                     }
+    //                     else if(memberVO.bettingInfo[i].powerBallSum !== powerBallSum) { // 3.95
+    //                         currentPrice = currentPrice - Math.floor(memberVO.bettingInfo[i].price);
+    //                     }
+    //                 }
+    //                 // 4. 현재돈을 userid 를 찾아서 price에 업데이트 한다.
+    //                 gamePriceUpdate(currentPrice);
+    //
+    //                 // 5. 게임결과 + userid + 현재돈을 클라이언트로 전송한다.
+    //                 games_json.data.gameresult.price = currentPrice;
+    //                 games_json.data.gameresult.gameBettingResult = gameResultVO;
+    //
+    //                 games_json.data.gameresult.starttime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+    //                 var now = new Date();
+    //                 games_json.data.gameresult.servertime = new Date ( Date.UTC(now.getUTCFullYear()
+    //                     , now.getUTCMonth()
+    //                     , now.getUTCDay()
+    //                     , now.getUTCHours()
+    //                     , now.getUTCMinutes()
+    //                     , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
+    //
+    //                 games_json.data.gameresult.endtime = new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS');
+    //                 games_json.data.gameresult.result = fnOldArrayList();
+    //                 games_json.data.gameresult.gameList = list;
+    //                 games_json.data.gameresult.roundId = list.roundId.split("-")[3];
+    //                 games_json.data.gameresult.userId = userId;
+    //
+    //                 console.log(JSON.stringify(games_json));
+    //
+    //                 for (let item of rooms) {
+    //                     var resultData = JSON.parse(item);
+    //                     if(resultData.userId === userId) {
+    //                         var resultMsg = {
+    //                             code: 900,
+    //                             games_json: games_json,
+    //                             msg: "게임 결과 전송 성공"
+    //                         };
+    //                         io.to(resultData.socketId).emit("server-send", JSON.stringify(resultMsg)); //여기가 보냄, 방전체
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 // view engine setup
