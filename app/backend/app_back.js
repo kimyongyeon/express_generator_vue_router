@@ -266,7 +266,7 @@ var fnSigma = function () {
     timeCount++;
     var resultMsg = {
         code: 0,
-        timeCount: timeCount,
+        timeCount: 60 - timeCount,
         currenttime: new Date().toFormat('YYYY-MM-DD HH24:MI:SS')
     };
     console.log(resultMsg);
