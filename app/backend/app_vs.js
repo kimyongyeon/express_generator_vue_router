@@ -1,5 +1,5 @@
 var express = require('express');
-var io = require('socket.io').listen(80);
+var io = require('socket.io').listen(8080);
 var _date = require('date-utils');
 console.log(new Date().toFormat('YYYY-MM-DD HH24:MI:SS'));
 
