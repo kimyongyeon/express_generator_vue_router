@@ -25,32 +25,40 @@ io.sockets.on('connection', function (socket) {
                 var roomKey = key.replace('/', '');
                 socket.join(roomKey);
                 socketRoom[socket.id] = roomKey;
-                io.sockets.in(roomKey).emit('completeMatch', {});
+                data = {};
+                data.pcode = "p2";
+                io.sockets.in(socket.id).emit('completeMatch', data);
                 return;
             }
         }
         // 빈방이 없으면 혼자 방만들고 기다림.
         socket.join(socket.id);
         socketRoom[socket.id] = socket.id;
+        // 이때 무조건 선수 라고 알려주는 메세지가 필요한지
+        data = {};
+        data.pcode = "p1";
+        io.sockets.in(socketRoom[socket.id]).emit('receiveMessage', data);
     });
 
     // 요청 취소 시
     socket.on('cancelRequest', function(data){
         console.log("disconnected");
-        socketRoom = {};
-        rooms = [];
         currentPlayer = 0;
         cuurentGame = [];
+        socketRoom = {};
+        rooms = [];
+        io.emit('receiveMessage', 'disconnected');
 
     });
 
     socket.on("disconnect", function() {
         console.log("disconnected");
-
         socketRoom = {};
         rooms = [];
         currentPlayer = 0;
         cuurentGame = [];
+
+        io.emit('receiveMessage', 'disconnected');
 
         // var key = socketRoom[socket.id];
         // socket.leave(key);
@@ -86,8 +94,20 @@ io.sockets.on('connection', function (socket) {
             }
 
             console.log(data.msg);
+            io.sockets.in(socketRoom[socket.id]).emit('receiveMessage', data);
+            return;
+
         }
 
+        if (data.p != undefined && data.s != undefined) {
+            if(data.p == 1) {
+                data.name = "선수";
+            }  else {
+                data.name = "골키퍼";
+            }
+
+            data.msg = "ready";
+        }
         io.sockets.in(socketRoom[socket.id]).emit('receiveMessage', data);
 
     });
