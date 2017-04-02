@@ -13,6 +13,17 @@ var db;
 var GameModel;
 var app = express();
 
+function AppInit() {
+    dbConnect();
+    schemaMake();
+    gameResultDataRead();
+    // 게임 2880 회 저장
+    for(var i=0; i<2880; i++) {
+        fnArrayList();
+    }
+}
+
+
 function dbConnect() {
     mongoose.Promise = global.Promise;
     mongoose.connect('mongodb://kimyongyeon:asdwsx12@ds145359.mlab.com:45359/gamehis');
@@ -57,8 +68,6 @@ function schemaMake() {
     GameModel = mongoose.model('gameResult', gameResult);
 }
 
-dbConnect();
-schemaMake();
 
 // 로우하이 (1.95)
 // 로우:6,7,8,9, 10,11,12,13, 하이:14,15,16,17, 18,19,20,21
@@ -241,6 +250,7 @@ function gameResultDataSave(gameModel) {
 }
 
 function gameResultDataRead() {
+    GameModel.remove({}, (e) => console.log(e));
     GameModel.find({gameSeq: 2}, function(err, msg) {
         if (err) return console.error("err : " + msg);
         if(msg.length == 0) {
@@ -251,8 +261,6 @@ function gameResultDataRead() {
         }
     });
 }
-
-gameResultDataRead();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -395,5 +403,6 @@ function randomItem(_randItem) {
 }
 
 
+new AppInit();
 
 module.exports = app;
