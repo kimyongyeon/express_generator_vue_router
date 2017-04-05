@@ -198,9 +198,9 @@ function gameResultDataSet(list) {
         , now.getUTCMinutes()
         , now.getUTCSeconds()) ).toFormat('YYYY-MM-DD HH24:MI:SS');
     games_json.data.gameresult.endtime = new Date().addMinutes(_minute).toFormat('YYYY-MM-DD HH24:MI:SS');
-    games_json.data.gameresult.result = fnOldArrayList();
-    games_json.data.gameresult.gameList = list;
-    games_json.data.gameresult.roundId = list.roundId.split("-")[3];
+    // games_json.data.gameresult.result = fnOldArrayList();
+    // games_json.data.gameresult.gameList = list;
+    // games_json.data.gameresult.roundId = list.roundId.split("-")[3];
     games_json.data.gameresult.userId = "test";
     console.log(JSON.stringify(games_json));
     noticeSendMsg(games_json);
@@ -264,9 +264,10 @@ var timeCount = 0;
 var fnSigma = function () {
     // 응답코드 전송 5초마다 한번씩 전송
     timeCount++;
+    console.log(timeCount);
     var resultMsg = {
         code: 0,
-        timeCount: 60 - timeCount,
+        timeCount: 60 - (timeCount * 5),
         currenttime: new Date().toFormat('YYYY-MM-DD HH24:MI:SS')
     };
     console.log(resultMsg);
@@ -278,13 +279,14 @@ var fnSigma = function () {
  */
 var fnGameInfo = function () {
     if(dbConnectionFlag) {
+        console.log(`gameSeq : ${gameSeq}`);
         gameResultDataRead(gameSeq++);
         // dbConnectionFlag = false;
         timeCount = 0;
     }
 };
 
-setInterval(fnSigma, 1000); // 5초
+setInterval(fnSigma, 5000); // 5초
 // setInterval(fnGameInfo, 1000); // 1분 테스트
 setInterval(fnGameInfo, _minute * 60000);
 
