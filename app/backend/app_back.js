@@ -279,7 +279,7 @@ var fnSigma = function () {
  */
 var fnGameInfo = function () {
     if(dbConnectionFlag) {
-        if(gameSeq == 2880) {
+        if(gameSeq > 2880) {
             gameSeq = 0;
         }
         console.log(`gameSeq : ${gameSeq}`);
