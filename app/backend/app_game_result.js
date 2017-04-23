@@ -51,21 +51,22 @@ function schemaMake() {
      * 파워볼 구간합 - A,B,C,D중 하나
      * */
     var gameResult = new Schema({
-        gameSeq: Number,
+        gameSeq: Number, // 게임 시컨스
+        useYn: Boolean, // 사용유무
         gameId: String,  // 게임 아이디
-        roundId: String, // 라운드 아이디
+        roundId: String, // 라운드 아이디 : 하루 => 720
         bettingRank: Array, // 배팅 순위
         bettingSum: Number, // 배팅 합
-        lms: String,
+        lms: String, // 대중소
         lowHigh: String, // 로우 하이
         evenHole: String, // 짝 홀
         intervalSum: String, // 구간합
         powerBallSum: String, // 파워볼 구간합
-        gameList: Array,
+        gameList: Array, // 게임 목록
         reg_date: {type: Date, default: Date.now}
     });
 
-    GameModel = mongoose.model('gameResult', gameResult);
+    GameModel = mongoose.model('gameResultBackup', gameResult);
 }
 
 
@@ -232,7 +233,8 @@ function gameResultCreate(bettingArrayTotalData) {
             }
         })(descList), // 파워볼 구간합
         gameList: descList,
-        reg_date: Date.now()
+        reg_date: Date.now(),
+        useYn: false
     };
 
     console.log(gameModelParam);
